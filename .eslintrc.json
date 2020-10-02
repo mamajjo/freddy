@@ -1,0 +1,34 @@
+{
+    "plugins": [
+        "prettier",
+        "jest"
+    ],
+    "extends": [
+        "standard",
+        "prettier",
+        "prettier/standard",
+        "plugin:jest/recommended"
+    ],
+    "env": {
+        "node": true
+    },
+    "parser": "babel-eslint",
+    "rules": {
+        "promise/catch-or-return": "error",
+        "prettier/prettier": [
+            "error",
+            {
+                "singleQuote": true,
+                "semi": true,
+                "trailingComma": "none"
+            }
+        ],
+        "space-in-parens": [
+            2,
+            "never"
+        ],
+        "curly": [
+            "error"
+        ]
+    }
+}
