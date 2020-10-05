@@ -1,3 +1,5 @@
+import logger from '../lib/logger';
+
 export const getOne = (model) => async (req, res) => {
   try {
     const doc = await model.findOne({ createdBy: req.user._id, _id: req.params.id }).lean().exec();
@@ -21,6 +23,17 @@ export const getMany = (model) => async (req, res) => {
   } catch (e) {
     console.error(e);
     res.status(400).end();
+  }
+};
+
+export const getAll = (model) => async (req, res) => {
+  try {
+    const docs = await model.find().lean().exec();
+
+    res.status(200).json({ data: docs });
+  } catch (error) {
+    logger.error(error);
+    res.status(400).json({ message: error }).end();
   }
 };
 
@@ -83,6 +96,7 @@ export const crudControllers = (model) => ({
   removeOne: removeOne(model),
   updateOne: updateOne(model),
   getMany: getMany(model),
+  getAll: getAll(model),
   getOne: getOne(model),
   createOne: createOne(model)
 });

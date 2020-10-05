@@ -5,6 +5,7 @@ const router = Router();
 
 // /sensors/new
 router.route('/').post(controllers.createOne).get(controllers.getOne);
+router.route('/all').get(controllers.getAll);
 router
   .route('/:id')
   .put(controllers.updateOne)

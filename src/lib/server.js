@@ -4,8 +4,10 @@ import morgan from 'morgan';
 import cors from 'cors';
 import wordRouter from '../resources/words/word.router';
 import { connect } from '../utils/db';
-import { logger } from './logger';
+import authRouter, { protect } from '../utils/auth';
 import { env } from './env';
+import { logger } from './logger';
+import userRouter from '../resources/users/user.router';
 
 export const app = express();
 
@@ -22,49 +24,24 @@ app.use(
   })
 );
 app.use(morgan('dev'));
-app.use('/words', wordRouter);
+app.use('/api', protect);
+app.use('/api/words', wordRouter);
+app.use('/users', userRouter);
+app.use('/auth', authRouter);
 
 export const start = async () => {
   async function connectDB() {
-    console.warn('sth');
     await connect();
   }
 
   try {
     await connectDB();
+
     app.listen(env.PORT, () => {
-      console.log(`REST API on http://localhost:${env.PORT}/api`);
+      logger.debug('Freddy API on http://localhost: ', { port: env.PORT });
     });
   } catch (e) {
     logger.error('could not start up');
   }
   return app;
 };
-
-// export const app = express()
-
-// app.disable('x-powered-by')
-
-// app.use(cors())
-// app.use(json())
-// app.use(urlencoded({ extended: true }))
-// app.use(morgan('dev'))
-
-// app.post('/signup', signup)
-// app.post('/signin', signin)
-
-// app.use('/api', protect)
-// app.use('/api/user', userRouter)
-// app.use('/api/item', itemRouter)
-// app.use('/api/list', listRouter)
-
-// export const start = async () => {
-//   try {
-//     await connect()
-//     app.listen(config.port, () => {
-//       console.log(`REST API on http://localhost:${config.port}/api`)
-//     })
-//   } catch (e) {
-//     console.error(e)
-//   }
-// }
